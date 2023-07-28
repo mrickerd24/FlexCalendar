@@ -1,72 +1,83 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-  }
-  
-  h1 {
-    text-align: center;
-  }
-  
-  label {
-    margin-right: 10px;
-  }
-  
-  select {
-    padding: 5px;
-    font-size: 16px;
-  }
-  
-  button {
-    padding: 8px 18px;
-    font-size: 16px;
-    background-color: #f26522;
-    color: #FFF;
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  button:hover {
-	background-color: #FF8000;
-  }
-  
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-top: 20px;
-  }
-  
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-  }
-  
-  th {
-    background-color: #f2f2f2;
-  }
-  
-  #dataTable {
-    margin-top: 20px;
-  }
-  
-  #dataTable th, #dataTable td {
-    min-width: 120px;
-  }
-  
-  #confirmBtn, #editBtn {
-    display: block;
-    margin: 20px auto;
-  }
-  
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
 
+h1 {
+  text-align: center;
+}
 
-  #dropdown1 {
-  margin-bottom: 10px;
-  }
-  #project {
+label {
+  margin-right: 10px;
+}
+
+select {
+  padding: 5px;
+  font-size: 16px;
+}
+
+button {
+  padding: 8px 18px;
+  font-size: 16px;
+  background-color: #f26522;
+  color: #FFF;
+  border: none;
+  cursor: pointer;
   margin-top: 10px;
-  }
-.tab-label {
-  margin-left: 20px; /* Adjust the value to control the spacing */
+}
+
+button:hover {
+  background-color: #FF8000;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+#dataTable {
+  margin-top: 20px;
+}
+
+#dataTable th, #dataTable td {
+  min-width: 120px;
+}
+
+#confirmBtn, #editBtn {
+  display: block;
+  margin: 20px auto;
+}
+
+#dropdown1 {
+  margin-bottom: 10px;
+}
+
+#project {
+  margin-top: 10px;
+}
+
+/* Additional styles for elements with specific IDs */
+
+#name,
+#Motive,
+#day,
+#year,
+#month,
+#hours {
+  /* Add styles specific to these dropdown elements if needed */
+}
+
+#addBtn {
+  /* Add styles specific to the "Add" button if needed */
 }
