@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
   
 
   // Fetch names and motives from the API endpoints
-  fetch('http://localhost:8000/api/names')
+  fetch('https://flex-calendar-backend.example.com/api/names')
     .then((response) => response.json())
     .then((data) => {
       const names = data.names;
@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch((error) => console.error('Error fetching names:', error));
 
-  fetch('http://localhost:8000/api/getAllMotives')
+  fetch('https://flex-calendar-backend.example.com/api/getAllMotives')
     .then((response) => response.json())
     .then((data) => {
       const motives = data.motives;
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         // Send the wrapped object to the server using fetch API
-        fetch('http://localhost:8000/api/saveData', {
+        fetch('https://flex-calendar-backend.example.com/api/saveData', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
