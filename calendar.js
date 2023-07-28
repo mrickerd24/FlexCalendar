@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
   const nameSelect = document.getElementById("name");
   const motiveSelect = document.getElementById("Motive");
@@ -36,27 +35,27 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-const addBtn = document.getElementById("addBtn");
-addBtn.addEventListener("click", function () {
-  const name = nameSelect.value;
-  const motive = motiveSelect.value;
-  const month = document.getElementById("month").value;
-  const day = daySelect.value;
-  const year = document.getElementById("year").value;
-  const hours = document.getElementById("hours").value;
-  const date = `${year}-${month}-${day}`;
+  const addBtn = document.getElementById("addBtn");
+  addBtn.addEventListener("click", function () {
+    const name = nameSelect.value;
+    const motive = motiveSelect.value;
+    const month = document.getElementById("month").value;
+    const day = daySelect.value;
+    const year = document.getElementById("year").value;
+    const hours = document.getElementById("hours").value;
+    const date = `${year}-${month}-${day}`;
 
-  const newRow = dataTable.insertRow();
-  newRow.innerHTML = `<td>${name}</td><td>${motive}</td><td>${date}</td><td>${hours}</td>`;
+    const newRow = dataTable.insertRow();
+    newRow.innerHTML = `<td>${name}</td><td>${motive}</td><td>${date}</td><td>${hours}</td>`;
 
-  // Store the event object in the row's dataset for future reference (optional)
-  newRow.dataset.event = JSON.stringify({
-    name: name,
-    motive: motive,
-    date: date,
-    hours: hours,
+    // Store the event object in the row's dataset for future reference (optional)
+    newRow.dataset.event = JSON.stringify({
+      name: name,
+      motive: motive,
+      date: date,
+      hours: hours,
+    });
   });
-});
 
   // Fetch names and motives from the API endpoints and then populate the dropdowns
   Promise.all([
@@ -78,50 +77,6 @@ addBtn.addEventListener("click", function () {
       selectedRowIndex = targetRow.rowIndex;
     }
   });
-
-  // Function to handle the "Confirm" button click event
-  const confirmBtn = document.getElementById("confirmBtn");
-  if (confirmBtn) {
-    confirmBtn.addEventListener("click", function () {
-      const rows = dataTable.getElementsByTagName("tr");
-      const data = [];
-      for (let i = 0; i < rows.length; i++) {
-        // Retrieve the event object from the row's dataset (stored during the "Add" button click)
-        const event = JSON.parse(rows[i].dataset.event);
-        data.push(event);
-      }
-
-      // Create an object to wrap the array of data
-      const requestData = {
-        events: data,
-      };
-
-      // Send the wrapped object to the server using fetch API
-      fetch('https://precious-cat-ce131a.netlify.app/.netlify/functions/saveData', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData), // Send the wrapped object
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok.');
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data.message);
-          alert('Data added!');
-        })
-        .catch((error) => {
-          console.error('Error saving data to the server:', error);
-          alert('Failed to save data. Please try again later.');
-        });
-    });
-  }
-
-  // Rest of the code for handling the "Query Data" button click remains the same
 
   // Call the function to populate the "Day" dropdown with days from 1 to 31
   populateDays();
