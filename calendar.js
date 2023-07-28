@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
   const nameSelect = document.getElementById("name");
   const motiveSelect = document.getElementById("Motive");
@@ -57,24 +58,19 @@ document.addEventListener("DOMContentLoaded", function () {
       hours: hours,
     });
   });
-  
 
-  // Fetch names and motives from the API endpoints
-  fetch('https://flex-calendar-backend.example.com/api/names')
-    .then((response) => response.json())
-    .then((data) => {
-      const names = data.names;
+  // Fetch names and motives from the API endpoints and then populate the dropdowns
+  Promise.all([
+    fetch('https://precious-cat-ce131a.netlify.app/api/names').then((response) => response.json()),
+    fetch('https://precious-cat-ce131a.netlify.app/api/getAllMotives').then((response) => response.json())
+  ])
+    .then(([namesData, motivesData]) => {
+      const names = namesData.names;
+      const motives = motivesData.motives;
       populateNames(names);
-    })
-    .catch((error) => console.error('Error fetching names:', error));
-
-  fetch('https://flex-calendar-backend.example.com/api/getAllMotives')
-    .then((response) => response.json())
-    .then((data) => {
-      const motives = data.motives;
       populateMotives(motives);
     })
-    .catch((error) => console.error('Error fetching motives:', error));
+    .catch((error) => console.error('Error fetching data:', error));
 
   // Function to handle row selection in the table
   dataTable.addEventListener("click", function (event) {
@@ -83,42 +79,50 @@ document.addEventListener("DOMContentLoaded", function () {
       selectedRowIndex = targetRow.rowIndex;
     }
   });
-  
 
-
-        // Create an object to wrap the array of data
-        const requestData = {
-          events: data,
-        };
-
-        // Send the wrapped object to the server using fetch API
-        fetch('https://flex-calendar-backend.example.com/api/saveData', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(requestData), // Send the wrapped object
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok.');
-            }
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data.message);
-            alert('Data added!');
-          })
-          .catch((error) => {
-            console.error('Error saving data to the server:', error);
-            alert('Failed to save data. Please try again later.');
-          });
+  // Function to handle the "Confirm" button click event
+  const confirmBtn = document.getElementById("confirmBtn");
+  if (confirmBtn) {
+    confirmBtn.addEventListener("click", function () {
+      const rows = dataTable.getElementsByTagName("tr");
+      const data = [];
+      for (let i = 0; i < rows.length; i++) {
+        // Retrieve the event object from the row's dataset (stored during the "Add" button click)
+        const event = JSON.parse(rows[i].dataset.event);
+        data.push(event);
       }
+
+      // Create an object to wrap the array of data
+      const requestData = {
+        events: data,
+      };
+
+      // Send the wrapped object to the server using fetch API
+      fetch('https://precious-cat-ce131a.netlify.app/.netlify/functions/saveData', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData), // Send the wrapped object
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok.');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data.message);
+          alert('Data added!');
+        })
+        .catch((error) => {
+          console.error('Error saving data to the server:', error);
+          alert('Failed to save data. Please try again later.');
+        });
     });
   }
 
-  // Function to handle the "Query Data" button click event
-  // ... (rest of the code for handling the "Query Data" button click remains the same)
+  // Rest of the code for handling the "Query Data" button click remains the same
 
   // Call the function to populate the "Day" dropdown with days from 1 to 31
   populateDays();
