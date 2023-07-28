@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const motiveSelect = document.getElementById("Motive");
   const daySelect = document.getElementById("day");
   const dataTable = document.getElementById("dataTable").getElementsByTagName("tbody")[0];
-  let selectedRowIndex = null;
+  const confirmBtn = document.getElementById("confirmBtn");
 
   // Function to populate the "Name" dropdown with names
   function populateNames(names) {
@@ -81,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch((error) => console.error('Error fetching data:', error));
 
   // Function to handle the "Confirm" button click event
-  const confirmBtn = document.getElementById("confirmBtn");
   confirmBtn.addEventListener("click", function () {
     const rows = dataTable.getElementsByTagName("tr");
     const data = [];
