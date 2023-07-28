@@ -36,28 +36,27 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Function to handle the "Add" button click event
-  const addBtn = document.getElementById("addBtn");
-  addBtn.addEventListener("click", function () {
-    const name = nameSelect.value;
-    const motive = motiveSelect.value;
-    const month = document.getElementById("month").value;
-    const day = daySelect.value;
-    const year = document.getElementById("year").value;
-    const hours = document.getElementById("hours").value;
-    const date = `${year}-${month}-${day}`;
+const addBtn = document.getElementById("addBtn");
+addBtn.addEventListener("click", function () {
+  const name = nameSelect.value;
+  const motive = motiveSelect.value;
+  const month = document.getElementById("month").value;
+  const day = daySelect.value;
+  const year = document.getElementById("year").value;
+  const hours = document.getElementById("hours").value;
+  const date = `${year}-${month}-${day}`;
 
-    const newRow = dataTable.insertRow();
-    newRow.innerHTML = `<td>${name}</td><td>${motive}</td><td>${date}</td><td>${hours}</td>`;
+  const newRow = dataTable.insertRow();
+  newRow.innerHTML = `<td>${name}</td><td>${motive}</td><td>${date}</td><td>${hours}</td>`;
 
-    // Store the event object in the row's dataset for future reference (optional)
-    newRow.dataset.event = JSON.stringify({
-      name: name,
-      motive: motive,
-      date: date,
-      hours: hours,
-    });
+  // Store the event object in the row's dataset for future reference (optional)
+  newRow.dataset.event = JSON.stringify({
+    name: name,
+    motive: motive,
+    date: date,
+    hours: hours,
   });
+});
 
   // Fetch names and motives from the API endpoints and then populate the dropdowns
   Promise.all([
