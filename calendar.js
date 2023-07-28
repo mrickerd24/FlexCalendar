@@ -85,23 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   
 
-  // Function to handle the "Confirm" button click event
-  const confirmBtn = document.getElementById("confirmBtn");
-  if (confirmBtn) { // Check if the "Confirm" button exists in the DOM
-    confirmBtn.addEventListener("click", function () {
-      if (selectedRowIndex !== null) {
-        // Implement logic to update data on the backend (optional)
-        alert("Data updated!");
-        selectedRowIndex = -1; // Reset the selected row index
-      } else {
-        // Implement logic to save data to the backend (optional)
-        const rows = dataTable.getElementsByTagName("tr");
-        const data = [];
-        for (let i = 0; i < rows.length; i++) {
-          // Retrieve the event object from the row's dataset (stored during the "Add" button click)
-          const event = JSON.parse(rows[i].dataset.event);
-          data.push(event);
-        }
 
         // Create an object to wrap the array of data
         const requestData = {
