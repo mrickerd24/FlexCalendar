@@ -4,6 +4,39 @@ document.addEventListener("DOMContentLoaded", function () {
   const daySelect = document.getElementById("day");
   const dataTable = document.getElementById("dataTable").getElementsByTagName("tbody")[0];
 
+  function updateTable() {
+    const name = nameSelect.value;
+    const motive = motiveSelect.value;
+    const month = document.getElementById("month").value;
+    const day = daySelect.value;
+    const year = document.getElementById("year").value;
+    const hours = document.getElementById("hours").value;
+    const date = `${year}-${month}-${day}`;
+
+    const newRow = dataTable.insertRow();
+    newRow.innerHTML = `<td>${name}</td><td>${motive}</td><td>${date}</td><td>${hours}</td>`;
+  }
+
+  nameSelect.addEventListener("change", updateTable);
+  motiveSelect.addEventListener("change", updateTable);
+  document.getElementById("month").addEventListener("change", updateTable);
+  daySelect.addEventListener("change", updateTable);
+  document.getElementById("year").addEventListener("change", updateTable);
+  document.getElementById("hours").addEventListener("change", updateTable);
+
+  // Fetch names and motives from the API endpoints and then populate the dropdowns
+  Promise.all([
+    fetch('https://precious-cat-ce131a.netlify.app/api/names').then((response) => response.json()),
+    fetch('https://precious-cat-ce131a.netlify.app/api/getAllMotives').then((response) => response.json())
+  ])
+    .then(([namesData, motivesData]) => {
+      const names = namesData.names;
+      const motives = motivesData.motives;
+      populateNames(names);
+      populateMotives(motives);
+    })
+    .catch((error) => console.error('Error fetching data:', error));
+
   // Function to populate the "Name" dropdown with names
   function populateNames(names) {
     names.forEach((name) => {
@@ -23,92 +56,4 @@ document.addEventListener("DOMContentLoaded", function () {
       motiveSelect.appendChild(option);
     });
   }
-
-  // Function to populate the "Day" dropdown with days from 1 to 31
-  function populateDays() {
-    for (let day = 1; day <= 31; day++) {
-      const option = document.createElement("option");
-      option.value = day;
-      option.textContent = day;
-      daySelect.appendChild(option);
-    }
-  }
-
-  // Function to add a new row to the table with selected data
-  function addRowToTable() {
-    const name = nameSelect.value;
-    const motive = motiveSelect.value;
-    const month = document.getElementById("month").value;
-    const day = daySelect.value;
-    const year = document.getElementById("year").value;
-    const hours = document.getElementById("hours").value;
-    const date = `${year}-${month}-${day}`;
-
-    const newRow = dataTable.insertRow();
-    newRow.innerHTML = `<td>${name}</td><td>${motive}</td><td>${date}</td><td>${hours}</td>`;
-
-    // Store the event object in the row's dataset for future reference (optional)
-    newRow.dataset.event = JSON.stringify({
-      name: name,
-      motive: motive,
-      date: date,
-      hours: hours,
-    });
-  }
-
-  // Fetch names and motives from the API endpoints and then populate the dropdowns
-  Promise.all([
-    fetch('https://precious-cat-ce131a.netlify.app/api/names').then((response) => response.json()),
-    fetch('https://precious-cat-ce131a.netlify.app/api/getAllMotives').then((response) => response.json())
-  ])
-    .then(([namesData, motivesData]) => {
-      const names = namesData.names;
-      const motives = motivesData.motives;
-      populateNames(names);
-      populateMotives(motives);
-    })
-    .catch((error) => console.error('Error fetching data:', error));
-
-  // Function to handle the form submission
-  const form = document.querySelector("form");
-  form.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const rows = dataTable.getElementsByTagName("tr");
-    const data = [];
-    for (let i = 0; i < rows.length; i++) {
-      const event = JSON.parse(rows[i].dataset.event);
-      data.push(event);
-    }
-
-    const requestData = {
-      events: data,
-    };
-
-    fetch('/.netlify/functions/saveData', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok.');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data.message);
-        alert('Data added!');
-        // Optionally, you can reset the table or take other actions here
-      })
-      .catch((error) => {
-        console.error('Error saving data to the server:', error);
-        alert('Failed to save data. Please try again later.');
-      });
-  });
-
-  // Call the function to populate the "Day" dropdown with days from 1 to 31
-  populateDays();
 });
