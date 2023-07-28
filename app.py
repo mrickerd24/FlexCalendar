@@ -6,11 +6,22 @@ import mysql.connector
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# Configure the database (SQLite in this example)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flex_calendar.db'
-db = SQLAlchemy(app)
+# Configure the database (MySQL in this example)
+app.config['MYSQL_HOST'] = '127.0.0.1'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'Zk77p455@'
+app.config['MYSQL_DB'] = 'FlexCalendar'
+
+# Initialize the MySQL database connection
+mysql_conn = mysql.connector.connect(
+    host=app.config['MYSQL_HOST'],
+    user=app.config['MYSQL_USER'],
+    password=app.config['MYSQL_PASSWORD'],
+    database=app.config['MYSQL_DB']
+)
 
 # Define the database model for CalendarEvent
+db = SQLAlchemy(app)
 class CalendarEvent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -74,10 +85,19 @@ def save_data():
 @app.route('/api/names', methods=['GET'])
 def get_all_names():
     try:
-        # Query all unique names from the database
-        names = db.session.query(CalendarEvent.name).distinct().all()
-        # Convert the query result to a list of strings
-        names = [name[0] for name in names]
+        connection = mysql.connector.connect(**app.config)
+        cursor = connection.cursor()
+
+        # Execute the SQL query to fetch all unique names
+        cursor.execute("SELECT DISTINCT name FROM CalendarEvent")
+
+        # Fetch all rows and convert them to a list of strings
+        names = [row[0] for row in cursor.fetchall()]
+
+        # Close the cursor and connection
+        cursor.close()
+        connection.close()
+
         return jsonify({"names": names}), 200
     except Exception as e:
         return jsonify({"error": f"Error fetching names: {e}"}), 500
@@ -86,10 +106,19 @@ def get_all_names():
 @app.route('/api/getAllMotives', methods=['GET'])
 def get_all_motives():
     try:
-        # Query all unique motives from the database
-        motives = db.session.query(CalendarEvent.motive).distinct().all()
-        # Convert the query result to a list of strings
-        motives = [motive[0] for motive in motives]
+        connection = mysql.connector.connect(**app.config)
+        cursor = connection.cursor()
+
+        # Execute the SQL query to fetch all unique motives
+        cursor.execute("SELECT DISTINCT motive FROM CalendarEvent")
+
+        # Fetch all rows and convert them to a list of strings
+        motives = [row[0] for row in cursor.fetchall()]
+
+        # Close the cursor and connection
+        cursor.close()
+        connection.close()
+
         return jsonify({"motives": motives}), 200
     except Exception as e:
         return jsonify({"error": f"Error fetching motives: {e}"}), 500
@@ -97,15 +126,28 @@ def get_all_motives():
 # Function to query all data from the CalendarEvent table
 def query_all_data():
     try:
-        # Query all data from the database
-        events = CalendarEvent.query.all()
-        data = [{
-            "id": event.id,
-            "name": event.name,
-            "motive": event.motive,
-            "date": event.date,
-            "hours": event.hours
-        } for event in events]
+        connection = mysql.connector.connect(**app.config)
+        cursor = connection.cursor()
+
+        # Execute the SQL query to fetch all data
+        cursor.execute("SELECT * FROM CalendarEvent")
+
+        # Fetch all rows and convert them to a list of dictionaries
+        data = [
+            {
+                "id": row[0],
+                "name": row[1],
+                "motive": row[2],
+                "date": row[3],
+                "hours": row[4]
+            }
+            for row in cursor.fetchall()
+        ]
+
+        # Close the cursor and connection
+        cursor.close()
+        connection.close()
+
         return jsonify(data), 200
     except Exception as e:
         return jsonify({"error": f"Error querying data: {e}"}), 500
