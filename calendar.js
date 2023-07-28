@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const motiveSelect = document.getElementById("Motive");
   const daySelect = document.getElementById("day");
   const dataTable = document.getElementById("dataTable").getElementsByTagName("tbody")[0];
-  let selectedRowIndex = null;
 
   // Function to populate the "Name" dropdown with names
   function populateNames(names) {
@@ -35,8 +34,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  const addBtn = document.getElementById("addBtn");
-  addBtn.addEventListener("click", function () {
+  // Function to add a new row to the table with selected data
+  function addRowToTable() {
     const name = nameSelect.value;
     const motive = motiveSelect.value;
     const month = document.getElementById("month").value;
@@ -55,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
       date: date,
       hours: hours,
     });
-  });
+  }
 
   // Fetch names and motives from the API endpoints and then populate the dropdowns
   Promise.all([
@@ -70,12 +69,44 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch((error) => console.error('Error fetching data:', error));
 
-  // Function to handle row selection in the table
-  dataTable.addEventListener("click", function (event) {
-    const targetRow = event.target.closest("tr");
-    if (targetRow && targetRow.parentNode === dataTable) {
-      selectedRowIndex = targetRow.rowIndex;
+  // Function to handle the form submission
+  const form = document.querySelector("form");
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const rows = dataTable.getElementsByTagName("tr");
+    const data = [];
+    for (let i = 0; i < rows.length; i++) {
+      const event = JSON.parse(rows[i].dataset.event);
+      data.push(event);
     }
+
+    const requestData = {
+      events: data,
+    };
+
+    fetch('/.netlify/functions/saveData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok.');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data.message);
+        alert('Data added!');
+        // Optionally, you can reset the table or take other actions here
+      })
+      .catch((error) => {
+        console.error('Error saving data to the server:', error);
+        alert('Failed to save data. Please try again later.');
+      });
   });
 
   // Call the function to populate the "Day" dropdown with days from 1 to 31
