@@ -52,6 +52,20 @@ document.addEventListener("DOMContentLoaded", function () {
     // Update the message box with the selected information
     document.getElementById("message").value = selectedInfo;
 
+    // Update the table with the form data
+    const newRow = dataTable.insertRow();
+    const nameCell = newRow.insertCell();
+    const motiveCell = newRow.insertCell();
+    const dateCell = newRow.insertCell();
+    const hoursCell = newRow.insertCell();
+    const messageCell = newRow.insertCell();
+
+    nameCell.textContent = name;
+    motiveCell.textContent = motive;
+    dateCell.textContent = date;
+    hoursCell.textContent = hours;
+    messageCell.textContent = message;
+
     // Store the data to be submitted to the server
     const requestData = {
       name: name,
@@ -80,19 +94,6 @@ document.addEventListener("DOMContentLoaded", function () {
         alert('Data added!');
         // Optionally, you can reset the form after successful submission
         document.getElementById("contact").reset();
-		        // Update the table with the form data
-        const newRow = dataTable.insertRow();
-        const nameCell = newRow.insertCell();
-        const motiveCell = newRow.insertCell();
-        const dateCell = newRow.insertCell();
-        const hoursCell = newRow.insertCell();
-        const messageCell = newRow.insertCell();
-
-        nameCell.textContent = name;
-        motiveCell.textContent = motive;
-        dateCell.textContent = date;
-        hoursCell.textContent = hours;
-        messageCell.textContent = message;
       })
       .catch((error) => {
         console.error('Error saving data to the server:', error);
