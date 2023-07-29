@@ -1,11 +1,11 @@
     document.addEventListener("DOMContentLoaded", function () {
-      const nameSelect = document.getElementById("name");
-      const motiveSelect = document.getElementById("Motive");
-      const daySelect = document.getElementById("day");
-      const monthSelect = document.getElementById("monthSelect"); // Updated reference
-      const yearSelect = document.getElementById("yearSelect"); // Updated reference
-      const hoursSelect = document.getElementById("hoursSelect");	  
-      const dataTable = document.getElementById("dataTable").getElementsByTagName("tbody")[0];
+	  const nameSelect = document.getElementById("nameSelect");
+	  const motiveSelect = document.getElementById("MotiveSelect");
+	  const daySelect = document.getElementById("daySelect");
+	  const monthSelect = document.getElementById("monthSelect"); // Updated reference
+	  const yearSelect = document.getElementById("yearSelect"); // Updated reference
+	  const hoursSelect = document.getElementById("hoursSelect");
+	  const dataTable = document.getElementById("dataTable").getElementsByTagName("tbody")[0];
 
       // Function to clear the form
       function clearForm() {
