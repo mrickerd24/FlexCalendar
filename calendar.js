@@ -47,6 +47,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const message = document.getElementById("message").value;
     const date = `${year}-${month}-${day}`;
 
+    const selectedInfo = `Name: ${name}\nMotive: ${motive}\nDate: ${date}\nHours: ${hours}\nMessage: ${message}`;
+
+    // Update the message box with the selected information
+    document.getElementById("message").value = selectedInfo;
+
     // Store the data to be submitted to the server
     const requestData = {
       name: name,
