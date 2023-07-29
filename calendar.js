@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
       nameSelect.appendChild(option);
     });
   }
+
   // Function to populate the "Motive" dropdown with motives
   function populateMotives(motives) {
     motives.forEach((motive) => {
@@ -22,7 +23,8 @@ document.addEventListener("DOMContentLoaded", function () {
       motiveSelect.appendChild(option);
     });
   }
-   // Function to populate the "Day" dropdown with days from 1 to 31
+
+  // Function to populate the "Day" dropdown with days from 1 to 31
   function populateDays() {
     for (let day = 1; day <= 31; day++) {
       const option = document.createElement("option");
@@ -31,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
       daySelect.appendChild(option);
     }
   }
+
   // Function to handle the form submission
   function handleFormSubmit(event) {
     event.preventDefault(); // Prevent default form submission behavior
@@ -41,16 +44,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const day = daySelect.value;
     const year = document.getElementById("year").value;
     const hours = document.getElementById("hours").value;
+    const message = document.getElementById("message").value;
     const date = `${year}-${month}-${day}`;
- 
+
     // Store the data to be submitted to the server
     const requestData = {
       name: name,
       motive: motive,
       date: date,
       hours: hours,
+      message: message,
     };
-	
+
     // Send the data to the server using fetch API
     fetch('https://precious-cat-ce131a.netlify.app/.netlify/functions/saveData', {
       method: 'POST',
@@ -76,13 +81,11 @@ document.addEventListener("DOMContentLoaded", function () {
         alert('Failed to save data. Please try again later.');
       });
   }
- 
+
   // Attach form submission event listener
   const form = document.getElementById("contact");
   form.addEventListener("submit", handleFormSubmit);
-  
 
-  
   // Fetch names and motives from the API endpoints and then populate the dropdowns
   Promise.all([
     fetch('https://precious-cat-ce131a.netlify.app/api/names').then((response) => response.json()),
