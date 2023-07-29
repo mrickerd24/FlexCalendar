@@ -3,7 +3,7 @@
 <head>
   <title>Flex Calendar</title>
   <link rel="stylesheet" href="Static/styles.css">
-  <script src="script.js" defer></script>
+  <script src="calendar.js" defer></script>
 </head>
 <header>
     <h1>Flex Calendar</h1>
@@ -15,7 +15,7 @@
     <section>	
 <br>
       <label for="name">Name:</label>
-      <select id="name">
+      <select id="nameSelect" name="name">
         <option value="" disabled selected>Select a name</option>
         <option value="Azevedo Andrew">Azevedo Andrew</option>
         <option value="Belanger Jean-Michel">Belanger Jean-Michel</option>
@@ -55,7 +55,7 @@
 <br>
 	<section>
       <label for="Motive">Out of office:</label>
-      <select id="Motive">
+      <select id="MotiveSelect" name="motive">
         <option value="" disabled selected>Select a motive</option>
         <option value="Vacation">Vacation</option>
         <option value="Personal day">Personal day</option>
@@ -67,7 +67,7 @@
 <br>
 	<section>
       <label for="date">Date:</label>
-      <select id="month">
+      <select id="monthSelect" name="month">
 		<option value="" disabled selected>Select a month</option>
 		<option value="01">January</option>
 		<option value="02">February</option>
@@ -82,7 +82,7 @@
 		<option value="11">November</option>
 		<option value="12">December</option>
 	  </select>
-	  <select id="day">
+	  <select id="daySelect" name="day">
 		<option value="" disabled selected>Select a day</option>
 		  <option value="1">1</option>
 		  <option value="2">2</option>
@@ -116,7 +116,7 @@
 		  <option value="30">30</option>
 		  <option value="31">31</option>			  
 	  </select>
-	  <select id="year">
+	  <select id="yearSelect" name="year">
 		<option value="" disabled selected>Select a year</option>
 		  <!-- Options for years -->
 		  <option value="2023">2023</option>
@@ -127,7 +127,7 @@
 <hr>
 <br>
       <label for="hours">Hours:</label>
-      <select id="hours">
+      <select id="hoursSelect" name="hours">
         <option value="" disabled selected>Select hours</option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -143,30 +143,35 @@
         <option value="12">12</option>
       </select>
     </section>
-
 <hr>
 <br>
-    <label for="message">Information:</label>
-    <textarea id="message" name="message" ></textarea>
-    <br>
-	<br>
-    <button type="submit">Submit</button>
-  </form>
-  </div>
-  <table id="dataTable">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Motive</th>
-        <th>Date</th>
-        <th>Hours</th>
-        <th>Message</th>
-      </tr>
-    </thead>
+	<table id="dataTable">
+		<thead>
+		  <tr>
+			<th>Name</th>
+			<th>Motive</th>
+			<th>Date</th>
+			<th>Hours</th>
+		  </tr>
+		</thead>
+
     <tbody>
       <!-- Table data will be dynamically added here -->
     </tbody>
-  </table>
-  
+    </table>
+<br>
+	<section id="messageSection" >
+    <label for="message">Informations:</label>
+    <textarea id="message" name="message" ></textarea>
+	</section>
+<br>
+
+    <div class="button-container">
+    <!-- Edit and Add buttons inside the form -->
+    <button type="button" id="editButton">Edit</button>
+    <button type="button" id="addButton">Add</button>
+    <button type="submit" id="submitButton">Submit</button>
+  </div>
+</form>
 </body>
 </html>
