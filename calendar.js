@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 	
     // Send the data to the server using fetch API
-    fetch('/.netlify/functions/saveData', {
+    fetch('https://precious-cat-ce131a.netlify.app/.netlify/functions/saveData', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -80,6 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Attach form submission event listener
   const form = document.getElementById("contact");
   form.addEventListener("submit", handleFormSubmit);
+  
+
   
   // Fetch names and motives from the API endpoints and then populate the dropdowns
   Promise.all([
