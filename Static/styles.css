@@ -3,6 +3,7 @@ body {
   margin: 20px;
 }
 
+
 h1 {
   text-align: center;
 }
@@ -75,7 +76,15 @@ th {
 #year,
 #month,
 #hours {
-  /* Add styles specific to these dropdown elements if needed */
+  
 }
 
+textarea {
+  display: inline-block;
+  width: 200px; 
+  vertical-align: top; 
+}
+button {
+  margin-top: 10px; /* Adjust this value as needed */
+}
 
