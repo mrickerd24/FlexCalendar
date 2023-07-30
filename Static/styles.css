@@ -87,4 +87,50 @@ textarea {
 button {
   margin-top: 10px; /* Adjust this value as needed */
 }
+    /* Add the following CSS to position the GIF at the top */
+    .gif-container {
+      position: relative;
+      width: 600px;
+      height: 200px; /* Adjust the height as needed */
+      overflow: hidden;
+    }
 
+    .gif {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: play-once 1s forwards; /* Play the GIF only once and keep the last frame */
+    }
+
+    @keyframes play-once {
+      to {
+        visibility: visible;
+      }
+    }
+  .form-container {
+    position: center;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+	background-color: rgba(255, 255, 255, 0.7);
+    background-image: url("YellowInt.png"); /* Replace with the correct path to your background image */
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    /* Set the background color without affecting opacity */
+  }
+
+  /* Pseudo-element to create the transparent overlay */
+  .form-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none; /* Allow clicks to pass through the overlay to the form elements */
+  }
