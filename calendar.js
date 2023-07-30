@@ -1,20 +1,23 @@
-    document.addEventListener("DOMContentLoaded", function () {
+	document.addEventListener("DOMContentLoaded", function () {
 	  const nameSelect = document.getElementById("nameSelect");
 	  const motiveSelect = document.getElementById("MotiveSelect");
 	  const daySelect = document.getElementById("daySelect");
-	  const monthSelect = document.getElementById("monthSelect"); // Updated reference
-	  const yearSelect = document.getElementById("yearSelect"); // Updated reference
+	  const monthSelect = document.getElementById("monthSelect");
+	  const yearSelect = document.getElementById("yearSelect");
 	  const hoursSelect = document.getElementById("hoursSelect");
 	  const dataTable = document.getElementById("dataTable").getElementsByTagName("tbody")[0];
 
       // Function to clear the form
       function clearForm() {
-        nameSelect.selectedIndex = 0;
-        motiveSelect.selectedIndex = 0;
-        daySelect.selectedIndex = 0;
-        document.getElementById("month").selectedIndex = 0;
-        document.getElementById("year").selectedIndex = 0;
-        document.getElementById("hours").selectedIndex = 0;
+		nameSelect.selectedIndex = 0;
+		motiveSelect.selectedIndex = 0;
+		daySelect.selectedIndex = 0;
+		monthSelect.selectedIndex = 0;
+		yearSelect.selectedIndex = 0;
+		hoursSelect.selectedIndex = 0;
+        document.getElementById("monthSelect").selectedIndex = 0;
+        document.getElementById("yearSelect").selectedIndex = 0;
+        document.getElementById("hoursSelect").selectedIndex = 0;
         document.getElementById("message").value = "";
       }
 
@@ -48,8 +51,7 @@
         }
       }
 
-      // Update the table with the form data
-      function updateTable() {
+	  function updateTextArea() {
 		const name = nameSelect.value;
 		const motive = motiveSelect.value;
 		const month = monthSelect.value;
@@ -57,72 +59,38 @@
 		const year = yearSelect.value;
 		const hours = hoursSelect.value;
 		const message = document.getElementById("message").value;
+
 		const date = `${year}-${month}-${day}`;
+		const infoText = `Name: ${name}\nOut of office: ${motive}\nDate: ${date}\nHours: ${hours}\nInformations: ${message}`;
 
-  // Check if a row with the same data already exists in the table
-  const existingRow = findExistingRow(name, motive, date, hours);
+		document.getElementById("message").value = infoText;
+	  }
 
-  if (existingRow) {
-    // If a row exists, update its content
-    existingRow.cells[0].textContent = name;
-    existingRow.cells[1].textContent = motive;
-    existingRow.cells[2].textContent = date;
-    existingRow.cells[3].textContent = hours;
-  } else {
-    // If no row exists, insert a new row
-    const newRow = dataTable.insertRow();
-    const nameCell = newRow.insertCell();
-    const motiveCell = newRow.insertCell();
-    const dateCell = newRow.insertCell();
-    const hoursCell = newRow.insertCell();
 
-    nameCell.textContent = name;
-    motiveCell.textContent = motive;
-    dateCell.textContent = date;
-    hoursCell.textContent = hours;
+	  function addToTable() {
+		const name = nameSelect.value;
+		const motive = motiveSelect.value;
+		const month = monthSelect.value;
+		const day = daySelect.value;
+		const year = yearSelect.value;
+		const hours = hoursSelect.value;
+		const message = document.getElementById("message").value;
 
-    // Message cell is not populated since it's not part of the table header
-  }
+		const date = `${year}-${month}-${day}`;
+		const newRow = document.createElement("tr");
+		newRow.innerHTML = `
+		  <td>${name}</td>
+		  <td>${motive}</td>
+		  <td>${date}</td>
+		  <td>${hours}</td>
+		  <td>${message}</td>
+		`;
+		dataTable.appendChild(newRow);
+	  }
 
-  // Message cell is not populated since it's not part of the table header
-}
 
-// Function to find an existing row with the same data in the table
-function findExistingRow(name, motive, date, hours) {
-  const rows = dataTable.getElementsByTagName("tr");
-
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    const rowData = [row.cells[0].textContent, row.cells[1].textContent, row.cells[2].textContent, row.cells[3].textContent];
-
-    if (rowData[0] === name && rowData[1] === motive && rowData[2] === date && rowData[3] === hours) {
-      return row;
-    }
-  }
-
-  return null;
-}
-
-      // Attach change event listeners to the dropdowns
-      nameSelect.addEventListener("change", updateTable);
-      motiveSelect.addEventListener("change", updateTable);
-      daySelect.addEventListener("change", updateTable);
-      document.getElementById("month").addEventListener("change", updateTable);
-      document.getElementById("year").addEventListener("change", updateTable);
-      document.getElementById("hours").addEventListener("change", updateTable);
-      document.getElementById("message").addEventListener("change", updateTable);
-
-      // Attach click event listener to "Add" button
-      document.getElementById("addButton").addEventListener("click", function () {
-        updateTable();
-        clearForm();
-      });
-
-      // Attach click event listener to "Clear" button (previously named "Edit" button)
-      document.getElementById("editButton").addEventListener("click", function () {
-        clearForm();
-      });
-
+	
+	
       // Fetch names and motives from the API endpoints and then populate the dropdowns
       Promise.all([
         fetch('https://precious-cat-ce131a.netlify.app/api/names').then((response) => response.json()),
