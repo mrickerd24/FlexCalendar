@@ -13,6 +13,42 @@ document.addEventListener("DOMContentLoaded", function () {
   const timeFrameSelect = document.getElementById("timeFrameSelect");
   const submitButton = document.getElementById("submitButton");
 
+  let isEditing = false; // Variable to track if we are in edit mode
+  let editRowIndex = -1; // Variable to store the index of the row being edited
+
+  // Function to edit a row in the table
+  function editTableRow(rowIndex) {
+    isEditing = true;
+    editRowIndex = rowIndex;
+	
+    // Retrieve the data from the table row and populate the form fields for editing
+    const table = document.getElementById("dataTable");
+    const row = table.rows[rowIndex];
+    const name = row.cells[0].textContent;
+    const motive = row.cells[1].textContent;
+    const date = row.cells[2].textContent;
+    const hours = row.cells[3].textContent;
+    const message = row.cells[4].textContent;
+
+    nameSelect.value = name;
+    motiveSelect.value = motive;
+
+    // Parse the date to extract year, month, and day
+    const [year, month, day] = date.split("-");
+    yearSelect.value = year;
+    monthSelect.value = month;
+    daySelect.value = day;
+
+    // For Partial day, populate the hours field
+    if (motive === "Partial day") {
+      hoursSection.style.display = "block";
+      hoursSelect.value = hours;
+    } else {
+      hoursSection.style.display = "none";
+    }	
+	
+ document.getElementById("message").value = message;	
+ }
   function checkRequiredFields() {
     const selectedName = nameSelect.value;
     const selectedMotive = motiveSelect.value;
@@ -68,6 +104,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("yearSelect").selectedIndex = 0;
     document.getElementById("hoursSelect").selectedIndex = 0;
     document.getElementById("message").value = "";
+	
+	// Enable the submit button after clearing the form
+    submitButton.disabled = false;
   }
 
 
@@ -100,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
   
-    // Call the function to populate the "Day" dropdown with days from 1 to 31
+  // Call the function to populate the "Day" dropdown with days from 1 to 31
   populateDays();
 
   function updateTextArea() {
@@ -119,26 +158,26 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-  function addToTable() {
-    const name = nameSelect.value;
-    const motive = motiveSelect.value;
-    const month = monthSelect.value;
-    const day = daySelect.value;
-    const year = yearSelect.value;
-    const hours = hoursSelect.value;
-    const message = document.getElementById("message").value;
+function addToTable() {
+  const name = nameSelect.value;
+  const motive = motiveSelect.value;
+  const month = monthSelect.value;
+  const day = daySelect.value;
+  const year = yearSelect.value;
+  const hours = hoursSelect.value;
+  const message = document.getElementById("message").value;
 
-    const date = `${year}-${month}-${day}`;
-    const newRow = document.createElement("tr");
-    newRow.innerHTML = `
-      <td>${name}</td>
-      <td>${motive}</td>
-      <td>${date}</td>
-      <td>${hours}</td>
-      <td>${message}</td>
-    `;
-    dataTable.appendChild(newRow);
-  }
+  const date = `${year}-${month}-${day}`;
+  const newRow = document.createElement("tr");
+  newRow.innerHTML = `
+    <td>${name}</td>
+    <td>${motive}</td>
+    <td>${date}</td>
+    <td>${hours}</td>
+    <td>${message}</td>
+  `;
+  dataTable.appendChild(newRow);
+}
 
   const inputs = document.querySelectorAll("input, select");
   inputs.forEach((input) => {
@@ -154,6 +193,27 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
 	
 	populateDays();
+	
+	 if (isEditing) {
+      // If in edit mode, update the existing row in the table
+      const table = document.getElementById("dataTable");
+      const row = table.rows[editRowIndex];
+      row.cells[0].textContent = nameSelect.value;
+      row.cells[1].textContent = motiveSelect.value;
+      const date = `${yearSelect.value}-${monthSelect.value}-${daySelect.value}`;
+      row.cells[2].textContent = date;
+      row.cells[3].textContent = hoursSelect.value;
+      row.cells[4].textContent = document.getElementById("message").value;
+      
+	  // Clear the form after editing
+      clearForm();
+    } else {
+      // If not in edit mode, add a new row to the table
+      addToTable();
+
+      // Clear the form after adding a new entry
+      clearForm();
+    }
 
   // Fetch names and motives from the API endpoints and then populate the dropdowns
   Promise.all([
@@ -167,17 +227,4 @@ document.addEventListener("DOMContentLoaded", function () {
     populateMotives(motives);
   })
   .catch((error) => console.error('Error fetching data:', error));
-
-  // Add event listener for form submission
-  const form = document.getElementById("OutOfOfficeForm");
-  form.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    // Perform any additional validation or data processing here
-    // Example: You can call addToTable() function to add the form data to the table
-    addToTable();
-
-    // Submit the form to Netlify (you can remove this if you're handling the submission differently)
-    form.submit();
-  });
-});
+  }
